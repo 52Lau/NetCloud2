@@ -260,7 +260,8 @@ def get_singer_hot_songs_ids(singer_url):
     ids_list = []
     html = requests.get(
         singer_url,headers = Constants.REQUEST_HEADERS,
-        proxies = Constants.PROXIES).text
+        # proxies = Constants.PROXIES,
+        verify=False).text
     pattern = re.compile(r'<a href="/song\?id=(\d+?)">.*?</a>')
     ids = re.findall(pattern,html)
     for id in ids:
@@ -291,8 +292,8 @@ def _parse_config_xml():
     :return:dict
     '''
     config_dict = {
-        "phone":None,
-        "password":None,
+        "phone":'18684820406',
+        "password":'15576771990',
         "email":None,
         "rememberLogin":None,
         "saveRootDir":None
