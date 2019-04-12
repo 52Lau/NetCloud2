@@ -331,7 +331,7 @@ class NetCloudCrawler(object):
         Helper.save_lines_to_file(all_hot_comments_json_str_list,save_path)
         self.logger.info("Write {singer_name}'s {num} hot songs hot comments successfully!".format(singer_name = self.singer_name,num = len(song_ids)))
         self.logger.info("hahahahah{save_path}".format(save_path=self.singer_all_hot_comments_file_path))
-        return all_hot_comments_list
+        return all_hot_comments_list,self.song_path
 
     def generate_all_necessary_files(self,threads = 10):
         '''

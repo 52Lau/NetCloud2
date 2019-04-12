@@ -22,17 +22,23 @@ import json
 import time
 import os
 import re
+import sys
 
 class NetCloudCrawlerTest:
     def __init__(self):
+        self.input=sys.argv
         self.logger = Helper.get_logger()
-        self.singer_name = "刘瑞琪"
-        self.song_name = "离开的借口"
+        # self.singer_name = "刘瑞琪"
+        # self.song_name = "离开的借口"
+        self.singer_name = self.input[0]
+        self.song_name = self.input[1]
         self.crawler = Crawler.NetCloudCrawler(self.song_name,self.singer_name)
         self.singer_url = 'http://music.163.com/artist?id={singer_id}'.format(singer_id=self.crawler.singer_id)
 
     def test_save_singer_all_hot_comments_to_file(self):
-        self.crawler.save_singer_all_hot_comments_to_file()
+        hot_comments,song_path=self.crawler.save_singer_all_hot_comments_to_file()
+        print(song_path)
+        self.test_foreach_hot_comments(hot_comments,song_path)
 
     def test_get_singer_hot_songs_ids(self):
         self.logger.info(Helper.get_singer_hot_songs_ids(self.singer_url))
@@ -54,7 +60,7 @@ class NetCloudCrawlerTest:
         self.crawler.generate_all_necessary_files()
 
 
-    def test_foreach_hot_comments(self,hot_comments):
+    def test_foreach_hot_comments(self,hot_comments,song_path):
         for item in hot_comments:
             comment = item['content']  # comments content
             # replace comma to blank,because we want save text as csv format,
@@ -71,8 +77,8 @@ class NetCloudCrawlerTest:
                 userID=userID, nickname=nickname, avatarUrl=avatarUrl, comment_time=comment_time,likedCount=likedCount, comment=comment
             )
 
-            path=self.singer_all_hot_comments_file_path+'\\'+self.singer_name +'\\'+self.song_name+ '\\' + avatarUrl.split("/")[-1]
-            dirPath=self.singer_all_hot_comments_file_path+'\\'+self.singer_name +'\\'+self.song_name
+            path=song_path+ '\\' + avatarUrl.split("/")[-1]
+            dirPath=song_path
             # path = 'D:\\Pyhton project\\NetCloud\\netcloud\\util\\songs\\'+self.singer_name +'\\'+self.song_name+ '\\' + avatarUrl.split("/")[-1]
             # dirPath='D:\\Pyhton project\\NetCloud\\netcloud\\util\\songs\\'+self.singer_name +'\\'+self.song_name
             # path = 'netcloud\\util\\songs\\' + self.singer_name + '\\' + self.song_name + '\\' + \avatarUrl.split("/")[-1]
@@ -193,8 +199,8 @@ class NetCloudCrawlerTest:
         '''
 
         # self.test_get_hot_comments()
-        hot_comments=self.test_save_singer_all_hot_comments_to_file()
-        self.test_foreach_hot_comments(hot_comments)
+        self.test_save_singer_all_hot_comments_to_file()
+
         # self.test_get_singer_hot_songs_ids()
         #self.test_save_all_comments_to_file()
         # self.test_save_singer_all_hot_comments_to_file()

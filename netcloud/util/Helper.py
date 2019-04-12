@@ -260,7 +260,7 @@ def get_singer_hot_songs_ids(singer_url):
     ids_list = []
     html = requests.get(
         singer_url,headers = Constants.REQUEST_HEADERS,
-        # proxies = Constants.PROXIES,
+        proxies = Constants.PROXIES,
         verify=False).text
     pattern = re.compile(r'<a href="/song\?id=(\d+?)">.*?</a>')
     ids = re.findall(pattern,html)
